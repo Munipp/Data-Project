@@ -1,0 +1,75 @@
+USE master;                                                  
+GO
+
+USE Database1;
+GO
+CREATE TABLE Keyword (
+    KeywordID INT PRIMARY KEY,
+    KeywordText VARCHAR(50)
+);
+CREATE TABLE Person (
+    PersonID INT PRIMARY KEY,
+    Name NVARCHAR(50),
+	Role NVARCHAR(50)
+);
+CREATE TABLE Author (
+    AuthorID INT PRIMARY KEY,
+	Name NVARCHAR(100),
+    PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+);
+
+CREATE TABLE Supervisor (
+    SupervisorID INT PRIMARY KEY,
+	PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+
+);
+CREATE TABLE CoSupervisor (
+    CoSupervisorID INT PRIMARY KEY,
+	PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+);
+
+CREATE TABLE University (
+    UniversityID INT PRIMARY KEY,
+    Name NVARCHAR(100)
+    
+);
+
+CREATE TABLE Institute (
+    InstituteID INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    UniversityID INT FOREIGN KEY REFERENCES University(UniversityID)
+);
+CREATE TABLE SubjectTopic (
+    TopicID INT PRIMARY KEY,
+    TopicName NVARCHAR(100)
+);
+CREATE TABLE Thesis (
+    ThesisNumber INT PRIMARY KEY,
+    Title NVARCHAR(500),
+    Abstract NVARCHAR(4000),
+    Year INT,
+    Type NVARCHAR(50),
+    NumOfPages INT,
+    Language NVARCHAR(50),
+    SubmissionDate DATE,
+	SupervisorID INT FOREIGN KEY REFERENCES Supervisor(SupervisorID),
+	CoSupervisorID INT FOREIGN KEY REFERENCES CoSupervisor(CoSupervisorID),
+	AuthorID INT FOREIGN KEY REFERENCES Author(AuthorID),
+	KeywordID INT FOREIGN KEY REFERENCES Keyword(KeywordID),
+    UniversityID INT FOREIGN KEY REFERENCES University(UniversityID),
+    InstituteID INT FOREIGN KEY REFERENCES Institute(InstituteID),
+);
+CREATE TABLE ThesisSubjectTopic (
+    ThesisNumber INT,
+    TopicID INT,
+    PRIMARY KEY (ThesisNumber, TopicID),
+    FOREIGN KEY (ThesisNumber) REFERENCES Thesis(ThesisNumber),
+    FOREIGN KEY (TopicID) REFERENCES SubjectTopic(TopicID)
+);
+
+CREATE TABLE ThesisKeyword (
+    ThesisNumber INT,
+    KeywordID INT,
+    PRIMARY KEY (ThesisNumber, KeywordID),
+    FOREIGN KEY (ThesisNumber) REFERENCES Thesis(ThesisNumber),
+    FOREIGN KEY (KeywordID) REFERENCES Keyword(KeywordID)     );

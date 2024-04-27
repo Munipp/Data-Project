@@ -1,0 +1,230 @@
+USE Database1;
+GO
+CREATE TABLE Keyword (
+    KeywordID INT PRIMARY KEY,
+    KeywordText VARCHAR(50)
+);
+CREATE TABLE Admin (
+	AdminID INT PRIMARY KEY,
+	Username VARCHAR(50),
+	Password VARCHAR(50)
+);
+CREATE TABLE Person (
+    PersonID INT PRIMARY KEY,
+    Name NVARCHAR(50),
+	Role NVARCHAR(50)
+);
+
+CREATE TABLE Author (
+    AuthorID INT PRIMARY KEY,
+	Name NVARCHAR(100),
+    PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+);
+
+CREATE TABLE Supervisor (
+    SupervisorID INT PRIMARY KEY,
+	PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+
+);
+
+CREATE TABLE CoSupervisor (
+    CoSupervisorID INT PRIMARY KEY,
+	PersonID INT FOREIGN KEY REFERENCES Person(PersonID)
+);
+
+CREATE TABLE University (
+    UniversityID INT PRIMARY KEY,
+    Name NVARCHAR(100)
+    
+);
+
+CREATE TABLE Institute (
+    InstituteID INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    UniversityID INT FOREIGN KEY REFERENCES University(UniversityID)
+);
+CREATE TABLE SubjectTopic (
+    TopicID INT PRIMARY KEY,
+    TopicName NVARCHAR(100)
+);
+CREATE TABLE Thesis (
+    ThesisNumber INT PRIMARY KEY,
+    Title NVARCHAR(500),
+    Abstract NVARCHAR(4000),
+    Year INT,
+    Type NVARCHAR(50),
+    NumOfPages INT,
+    Language NVARCHAR(50),
+    SubmissionDate DATE,
+	SupervisorID INT FOREIGN KEY REFERENCES Supervisor(SupervisorID),
+	CoSupervisorID INT FOREIGN KEY REFERENCES CoSupervisor(CoSupervisorID),
+	AuthorID INT FOREIGN KEY REFERENCES Author(AuthorID),
+	KeywordID INT FOREIGN KEY REFERENCES Keyword(KeywordID),
+	TopicID INT FOREIGN KEY REFERENCES SubjectTopic(TopicID),
+    UniversityID INT FOREIGN KEY REFERENCES University(UniversityID),
+    InstituteID INT FOREIGN KEY REFERENCES Institute(InstituteID),
+);
+
+INSERT INTO Person (PersonID, Name, Role) VALUES (1, 'Ali Kaya','Öğrenci');
+INSERT INTO Person (PersonID, Name, Role) VALUES (2, 'Ayşe Demir', 'Öğrenci');
+INSERT INTO Person (PersonID, Name, Role) VALUES (3, 'Tarık Yeter', 'Öğretim Üyesi');
+INSERT INTO Person (PersonID, Name, Role) VALUES (4, 'Fatma Aksoy', 'Araştırmacı');
+INSERT INTO Person (PersonID, Name, Role) VALUES (5, 'Ahmet Can', 'Öğrenci');
+INSERT INTO Person (PersonID, Name, Role) VALUES (6, 'Mehmet Yıldız', 'Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (7, 'Emrecan Demir', 'Associate Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (8, 'Can Kaya', 'Assistant Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (9, 'Zeynep Yılmaz', 'Associate Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (10, 'Ahmet Şahin', 'Assistant Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (11, 'Deniz Sıla Polat', 'Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (12, 'Ece Kılıç', 'Assistant Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (13, 'Mustafa Arıcı', 'Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (14, 'Celal Şengör', 'Professor');
+INSERT INTO Person (PersonID, Name, Role) VALUES (15, 'İlber Ortaylı', 'Professor');
+
+
+INSERT INTO Author (AuthorID, Name, PersonID) VALUES (1, 'Ali Kaya',1);
+INSERT INTO Author (AuthorID, Name, PersonID) VALUES (2, 'Ayşe Demir',2);
+INSERT INTO Author (AuthorID, Name, PersonID) VALUES (3, 'Mehmet Yıldız',3);
+INSERT INTO Author (AuthorID, Name, PersonID) VALUES (4, 'Fatma Aksoy',4);
+INSERT INTO Author (AuthorID, Name, PersonID) VALUES (5, 'Ahmet Can',5);
+
+INSERT INTO Supervisor (SupervisorID, PersonID) VALUES (1,6);
+INSERT INTO Supervisor (SupervisorID, PersonID) VALUES (2,7);
+INSERT INTO Supervisor (SupervisorID, PersonID) VALUES (3,8);
+INSERT INTO Supervisor (SupervisorID, PersonID) VALUES (4,14);
+INSERT INTO Supervisor (SupervisorID, PersonID) VALUES (5,15);
+
+
+INSERT INTO CoSupervisor (CoSupervisorID, PersonID) VALUES (1,9);
+INSERT INTO CoSupervisor (CoSupervisorID, PersonID) VALUES (2,10);
+INSERT INTO CoSupervisor (CoSupervisorID, PersonID) VALUES (3,11);
+INSERT INTO CoSupervisor (CoSupervisorID, PersonID) VALUES (4,12);
+INSERT INTO CoSupervisor (CoSupervisorID, PersonID) VALUES (5,13);
+
+INSERT INTO University (UniversityID, Name) VALUES (1, 'Boğaziçi Üniversitesi');
+INSERT INTO University (UniversityID, Name) VALUES (2, 'ODTÜ');
+INSERT INTO University (UniversityID, Name) VALUES (3, 'İstanbul Teknik Üniversitesi');
+INSERT INTO University (UniversityID, Name) VALUES (4, 'Ankara Üniversitesi');
+INSERT INTO University (UniversityID, Name) VALUES (5, 'Hacettepe Üniversitesi');
+
+INSERT INTO Institute (InstituteID, Name, UniversityID) VALUES (1, 'Fen Bilimleri Enstitüsü', 1);
+INSERT INTO Institute (InstituteID, Name, UniversityID) VALUES (2, 'Sosyal Bilimler Enstitüsü', 2);
+INSERT INTO Institute (InstituteID, Name, UniversityID) VALUES (3, 'Mühendislik Enstitüsü', 3);
+INSERT INTO Institute (InstituteID, Name, UniversityID) VALUES (4, 'Sağlık Bilimleri Enstitüsü', 4);
+INSERT INTO Institute (InstituteID, Name, UniversityID) VALUES (5, 'Edebiyat Enstitüsü', 5);
+
+INSERT INTO SubjectTopic (TopicID, TopicName) VALUES (1, 'Biyoinformatik');
+INSERT INTO SubjectTopic (TopicID, TopicName) VALUES (2, 'Veri Madenciliği');
+INSERT INTO SubjectTopic (TopicID, TopicName) VALUES (3, 'Yapay Zeka');
+INSERT INTO SubjectTopic (TopicID, TopicName) VALUES (4, 'Büyük Veri Analitiği');
+INSERT INTO SubjectTopic (TopicID, TopicName) VALUES (5, 'Robotik');
+
+INSERT INTO Keyword (KeywordID, KeywordText) VALUES (1, 'Genetik Algoritmalar');
+INSERT INTO Keyword (KeywordID, KeywordText) VALUES (2, 'Karar Ağaçları');
+INSERT INTO Keyword (KeywordID, KeywordText) VALUES (3, 'Derin Öğrenme');
+INSERT INTO Keyword (KeywordID, KeywordText) VALUES (4, 'Veri Görselleştirme');
+INSERT INTO Keyword (KeywordID, KeywordText) VALUES (5, 'Nesne Algılama');
+
+
+INSERT INTO Thesis (ThesisNumber, Title, Abstract, Year, Type, NumOfPages, Language, SubmissionDate, SupervisorID, CoSupervisorID, AuthorID, KeywordID, TopicID, UniversityID, InstituteID)
+VALUES (
+    1,
+    'Yapay Zeka ve Otomasyon',
+    'Bu tez, yapay zeka tekniklerinin otomasyon alanında kullanımını inceliyor. Otomasyon sistemlerinde yapay zeka yöntemlerinin etkinliği ve uygulama alanları üzerinde odaklanılmaktadır.',
+    2022,
+    'Master',
+    120,
+    'Türkçe',
+    '2022-06-30',
+	5,
+	5,
+	5,
+	5,
+	5,
+	5,
+	5
+
+);
+
+INSERT INTO Thesis (ThesisNumber, Title, Abstract, Year, Type, NumOfPages, Language, SubmissionDate, SupervisorID, CoSupervisorID, AuthorID, KeywordID, TopicID, UniversityID, InstituteID)
+VALUES (
+    2,
+    'Veri Madenciliği ve Uygulamaları',
+    'Bu tez, veri madenciliği tekniklerinin gerçek dünya uygulamalarını incelemektedir. Farklı veri madenciliği algoritmalarının iş dünyasındaki kullanımını ve etkinliğini araştırmaktadır.',
+    2021,
+    'Master',
+    150,
+    'İngilizce',
+    '2021-08-15',
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4
+);
+
+INSERT INTO Thesis (ThesisNumber, Title, Abstract, Year, Type, NumOfPages, Language, SubmissionDate, SupervisorID, CoSupervisorID, AuthorID, KeywordID, TopicID, UniversityID, InstituteID)
+VALUES (
+    3,
+    'Büyük Veri Analitiği ve Yöntemleri',
+    'Bu tez, büyük veri analitiği yöntemlerinin kullanımını ve etkinliğini irdelemektedir. Büyük veri setleri üzerinde farklı analitik yaklaşımların karşılaştırılmasını sağlamaktadır.',
+    2023,
+    'PhD',
+    200,
+    'Türkçe',
+    '2023-05-20',
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1
+);
+
+INSERT INTO Thesis (ThesisNumber, Title, Abstract, Year, Type, NumOfPages, Language, SubmissionDate, SupervisorID, CoSupervisorID, AuthorID, KeywordID, TopicID ,UniversityID, InstituteID)
+VALUES (
+    4,
+    'Yapay Zeka ve Robotik',
+    'Bu tez, yapay zeka ve robotik teknolojileri arasındaki etkileşimi ele almaktadır. Yapay zeka yöntemlerinin robotik sistemler üzerindeki uygulamalarını inceliyor.',
+    2022,
+    'Master',
+    130,
+    'İngilizce',
+    '2022-10-10',
+	2,
+	2,
+	2,
+	2,
+	2,
+	2,
+	2
+);
+
+INSERT INTO Thesis (ThesisNumber, Title, Abstract, Year, Type, NumOfPages, Language, SubmissionDate, SupervisorID, CoSupervisorID, AuthorID, KeywordID, TopicID ,UniversityID, InstituteID)
+VALUES (
+    5,
+    'Nesnelerin İnterneti',
+    'Bu tez, nesnelerin interneti kavramını ve teknolojilerini ele almaktadır. Nesnelerin interneti üzerine yapılan çalışmaların genel bir değerlendirmesini sunmaktadır.',
+    2020,
+    'Master',
+    180,
+    'Türkçe',
+    '2020-12-05',
+	3,
+	3,
+	3,
+	3,
+	3,
+	3,
+	3
+
+
+);
+INSERT INTO Admin (AdminID,Username,Password) VALUES(1,'emrecankahraman','1234');
+INSERT INTO Admin (AdminID,Username,Password) VALUES(2,'tarıkbugrayeter','1234');
+INSERT INTO Admin (AdminID,Username,Password) VALUES(3,'volkantunalı','1234');
+INSERT INTO Admin (AdminID,Username,Password) VALUES(4,'denizsılapolat','1234');
+INSERT INTO Admin (AdminID,Username,Password) VALUES(5,'munipkatayıfçı','1234');
